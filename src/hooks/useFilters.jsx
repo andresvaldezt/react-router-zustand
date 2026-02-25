@@ -94,8 +94,8 @@ export function useFilters(){
             ? `${window.location.pathname}?${params.toString()}`
             : window.location.pathname
 
-        navigateTo(newUrl)
-    }, [filters, textToFilter, currentPage, navigateTo])
+         navigateTo(newUrl)
+    }, [filters, textToFilter, currentPage])
 
     const totalPages = Math.ceil(total / RESULTS_PER_PAGE);
 
