@@ -18,6 +18,7 @@ export function SearchResults({jobs}){
                 {jobs.map(job => (
                     <JobCard
                         key = {job.id}
+                        id = {job.id}
                         titulo = {job.titulo}
                         empresa = {job.empresa}
                         ubicacion = {job.ubicacion}
