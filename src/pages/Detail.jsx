@@ -2,14 +2,15 @@ import { useState, useEffect } from "react"
 import {  useParams, useNavigate } from "react-router"
 import { Link } from "../components/Link"
 import snarkdown from "snarkdown"
+import styles from "./Detail.module.css"
 
 
 function JobSection({ title, content }){
     const html =  snarkdown(content)
 
     return(
-        <section>
-            <h2>
+        <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>
                {title} 
             </h2>
             <div dangerouslySetInnerHTML={{__html: html}}>
@@ -19,7 +20,7 @@ function JobSection({ title, content }){
     )
 }
 
-export function JobDetail(){
+export default function JobDetail(){
     const { jobId } = useParams()
     const navigate = useNavigate()
 
@@ -86,11 +87,11 @@ export function JobDetail(){
                         <span>{job.titulo}</span>
                         </nav>
                     </div>
-                    <div>
-                        <h1>
+                    <div className={styles.header}>
+                        <h1 className={styles.title}>
                             {job.titulo}
                         </h1>
-                        <p>
+                        <p className={styles.meta}>
                             {job.empresa} - {job.ubicacion}
                         </p>
                     </div>

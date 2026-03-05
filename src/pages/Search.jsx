@@ -3,7 +3,7 @@ import { SearchResults } from '../components/SearchResults.jsx'
 import { Pagination } from '../components/Pagination.jsx'
 import { useFilters } from '../hooks/useFilters.jsx'
 
-export function SearchPage() {
+export default function SearchPage() {
 
   const {
     jobs,
