@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import {  useParams, useNavigate } from "react-router"
 import { Link } from "../components/Link"
 import snarkdown from "snarkdown"
 import styles from "./Detail.module.css"
+import { AuthContext } from "../context/AuthContext"
 
 
 function JobSection({ title, content }){
@@ -20,13 +21,9 @@ function JobSection({ title, content }){
     )
 }
 
-export default function JobDetail(){
-    const { jobId } = useParams()
-    const navigate = useNavigate()
+function DetailApplyButton () {
 
-    const [job, setJob] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const [err, setError] = useState(null)
+    const { isLoggedIn } = useContext(AuthContext)
     const [isApplied,setIsApplied] = useState(false)
 
     const text = isApplied ? 'Aplicado' : 'Aplicar';
@@ -35,6 +32,21 @@ export default function JobDetail(){
     function handleClick(){
         setIsApplied(!isApplied)
     }
+
+    return (
+        <button disabled={!isLoggedIn} className={`job-apply-button ${buttonClass}`} onClick={handleClick}>
+            {isLoggedIn ? text : "Inicia sesión para aplicar"}
+        </button>
+    )
+}
+
+export default function JobDetail({ isLoggedIn }){
+    const { jobId } = useParams()
+    const navigate = useNavigate()
+
+    const [job, setJob] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [err, setError] = useState(null)
 
     useEffect(() => {
         fetch(`https://jscamp-api.vercel.app/api/jobs/${jobId}`)
@@ -95,9 +107,7 @@ export default function JobDetail(){
                             {job.empresa} - {job.ubicacion}
                         </p>
                     </div>
-                    <button className={`job-apply-button ${buttonClass}`} onClick={handleClick}>
-                        {text}
-                    </button>
+                    <DetailApplyButton></DetailApplyButton>
                     <JobSection title="Descripcion del puesto" content={job.content.description}/>
                     <JobSection title="Responsabilidades" content={job.content.responsibilities}/>
                     <JobSection title="Requisitos" content={job.content.requirements}/>
