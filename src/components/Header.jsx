@@ -1,11 +1,8 @@
 import { Link } from "./Link"
 import { NavLink } from "react-router"
-import { useContext } from "react"
-import { AuthContext } from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext"
 
 export function Header(){
-
-    const { isLoggedIn, login, logout } = useContext(AuthContext)
 
     return(
         <header>
@@ -34,13 +31,7 @@ export function Header(){
                         Empleos
                 </NavLink>
             </nav>
-
-            {
-                isLoggedIn
-                    ? <button className={`job-apply-button`} onClick={logout}>Cerrar sesión</button>
-                    : <button className={`job-apply-button`} onClick={login}>Iniciar sesión</button>
-            }
-
+            <HeaderUserButton></HeaderUserButton>
             <div>
                 <devjobs-avatar
                 service="google"
@@ -65,4 +56,12 @@ export function Header(){
             </div>
         </header>
     )
+}
+
+const HeaderUserButton = () => {
+    const { isLoggedIn, login, logout } = useAuth()
+
+    return isLoggedIn
+        ? <button className={`job-apply-button`} onClick={logout}>Cerrar sesión</button>
+        : <button className={`job-apply-button`} onClick={login}>Iniciar sesión</button>
 }
