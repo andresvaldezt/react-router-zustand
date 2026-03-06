@@ -3,7 +3,7 @@ import {  useParams, useNavigate } from "react-router"
 import { Link } from "../components/Link"
 import snarkdown from "snarkdown"
 import styles from "./Detail.module.css"
-import { AuthContext } from "../context/AuthContext"
+import { useAuthStore } from "../store/authStore"
 
 
 function JobSection({ title, content }){
@@ -23,7 +23,7 @@ function JobSection({ title, content }){
 
 function DetailApplyButton () {
 
-    const { isLoggedIn } = useContext(AuthContext)
+    const { isLoggedIn } = useAuthStore()
     const [isApplied,setIsApplied] = useState(false)
 
     const text = isApplied ? 'Aplicado' : 'Aplicar';
@@ -40,7 +40,7 @@ function DetailApplyButton () {
     )
 }
 
-export default function JobDetail({ isLoggedIn }){
+export default function JobDetail(){
     const { jobId } = useParams()
     const navigate = useNavigate()
 
