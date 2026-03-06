@@ -1,6 +1,6 @@
 import { Link } from "./Link"
 import { NavLink } from "react-router"
-import { useAuth } from "../context/AuthContext"
+import { useAuthStore } from "../store/authStore"
 
 export function Header(){
 
@@ -59,7 +59,7 @@ export function Header(){
 }
 
 const HeaderUserButton = () => {
-    const { isLoggedIn, login, logout } = useAuth()
+    const { isLoggedIn, login, logout } = useAuthStore()
 
     return isLoggedIn
         ? <button className={`job-apply-button`} onClick={logout}>Cerrar sesión</button>
