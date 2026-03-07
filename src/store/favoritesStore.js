@@ -6,14 +6,16 @@ export const useFavoritesStore = create((set, get) => ({
     favorites: [],
 
     //Acciones
-    addFavorites: (jobId) => set({ 
-        favorites: state.favorites.includes(jobId)
-        ? state.favorites
-        : [...state.favorites, jobId]
-    }),
+    addFavorites: (jobId) => {
+        set((state) => ({ 
+            favorites: state.favorites.includes(jobId)
+            ? state.favorites
+            : [...state.favorites, jobId]
+        }))
+    },
 
-    removeFavorite: (jobId) => {
-        set((state) = ({
+    removeFavorites: (jobId) => {
+        set((state) => ({
             favorites: state.favorites.filter((id) => id !== jobId)
         }))
     },
@@ -23,9 +25,9 @@ export const useFavoritesStore = create((set, get) => ({
     },
 
     toggleFavorite: (jobId) => {
-        const { addFavorite, removeFavorite, isFavorite} = get()
+        const { addFavorites, removeFavorites, isFavorite, favorites} = get()
         const isFav = isFavorite(jobId)
-        isFav ? removeFavorite(jobId) : addFavorite(jobId)
+        isFav ? removeFavorites(jobId) : addFavorites(jobId)
     },
 
     countFavorites: () => get().favorites.length
