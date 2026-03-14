@@ -43,8 +43,8 @@ export function useFilters(){
     const isFiltered = Object.values(filters).some(v => 
         v !== null && v !== undefined && v.toString().trim() !== ''
     );
-    console.log("Filtros actuales:", filters);
-    console.log("¿Está filtrado?:", isFiltered);
+    //console.log("Filtros actuales:", filters);
+    //console.log("¿Está filtrado?:", isFiltered);
     
     useEffect(() => {
         //console.log(isFiltered)
@@ -64,11 +64,12 @@ export function useFilters(){
 
                 const queryParams = params.toString()
 
-                const response = await fetch(`https://jscamp-api.vercel.app/api/jobs?${queryParams}`)
+                const response = await fetch(`http://localhost:1234/jobs?${queryParams}`)
                 const json =  await response.json()
 
                 setJobs(json.data)
                 setTotal(json.total)
+                console.log('Trabajos obtenidos:', json.total)
             } catch (error) {
                 console.error('Error fetching jobs:', error)
             } finally {
@@ -82,12 +83,36 @@ export function useFilters(){
     useEffect(() =>{
 
         setSearchParams((params) => {
-            if (textToFilter) params.set('text', textToFilter)
-            if (filters.technology) params.set('technology', filters.technology)
-            if (filters.location) params.set('type', filters.location)
-            if (filters.experiencielevel) params.set('experiencielevel', filters.experiencielevel)
+            // Set parameters that have values
+            if (textToFilter) {
+                params.set('text', textToFilter)
+            } else {
+                params.delete('text')
+            }
+            
+            if (filters.technology) {
+                params.set('technology', filters.technology)
+            } else {
+                params.delete('technology')
+            }
+            
+            if (filters.location) {
+                params.set('type', filters.location)
+            } else {
+                params.delete('type')
+            }
+            
+            if (filters.experiencielevel) {
+                params.set('experiencielevel', filters.experiencielevel)
+            } else {
+                params.delete('experiencielevel')
+            }
 
-            if (currentPage > 1) params.set('page', currentPage)
+            if (currentPage > 1) {
+                params.set('page', currentPage)
+            } else {
+                params.delete('page')
+            }
 
             return params
         })
@@ -115,7 +140,15 @@ export function useFilters(){
         setFilters(initialFilters)
         setTextToFilter('')
         setCurrentPage(1)
-        setSearchParams({})
+        // Remove all search parameters explicitly
+        setSearchParams((params) => {
+            params.delete('text')
+            params.delete('technology')
+            params.delete('type')
+            params.delete('level')
+            params.delete('page')
+            return params
+        })
     }
 
     return {
