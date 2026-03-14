@@ -7,7 +7,7 @@ const initialFilters = {
     search: '',
     technology: '',
     location: '',
-    experiencielevel: ''
+    experiencelevel: ''
 }
 
 export function useFilters(){
@@ -22,7 +22,7 @@ export function useFilters(){
         return {
             technology: searchParams.get('technology') || '',
             location: searchParams.get('type') || '',
-            experiencielevel: searchParams.get('level') || ''
+            experiencelevel: searchParams.get('level') || ''
         }
     })
 
@@ -56,7 +56,7 @@ export function useFilters(){
                 if (textToFilter) params.append('text', textToFilter)
                 if (filters.technology) params.append('technology', filters.technology)
                 if (filters.location) params.append('type', filters.location)
-                if (filters.experiencielevel) params.append('experiencielevel', filters.experiencielevel)
+                if (filters.experiencelevel) params.append('experiencelevel', filters.experiencelevel)
 
                 const offset = (currentPage - 1) * RESULTS_PER_PAGE
                 params.append('limit', RESULTS_PER_PAGE)
@@ -83,37 +83,18 @@ export function useFilters(){
     useEffect(() =>{
 
         setSearchParams((params) => {
-            // Set parameters that have values
-            if (textToFilter) {
-                params.set('text', textToFilter)
-            } else {
-                params.delete('text')
+            const paramMap = {
+                'text': textToFilter,
+                'technology': filters.technology,
+                'type': filters.location,
+                'experiencelevel': filters.experiencelevel,
+                'page': currentPage > 1 ? currentPage : null
             }
             
-            if (filters.technology) {
-                params.set('technology', filters.technology)
-            } else {
-                params.delete('technology')
-            }
+            Object.entries(paramMap).forEach(([key, value]) => {
+                value ? params.set(key, value) : params.delete(key)
+            })
             
-            if (filters.location) {
-                params.set('type', filters.location)
-            } else {
-                params.delete('type')
-            }
-            
-            if (filters.experiencielevel) {
-                params.set('experiencielevel', filters.experiencielevel)
-            } else {
-                params.delete('experiencielevel')
-            }
-
-            if (currentPage > 1) {
-                params.set('page', currentPage)
-            } else {
-                params.delete('page')
-            }
-
             return params
         })
 
@@ -140,13 +121,9 @@ export function useFilters(){
         setFilters(initialFilters)
         setTextToFilter('')
         setCurrentPage(1)
-        // Remove all search parameters explicitly
         setSearchParams((params) => {
-            params.delete('text')
-            params.delete('technology')
-            params.delete('type')
-            params.delete('level')
-            params.delete('page')
+            const keysToDelete = ['text', 'technology', 'type', 'level', 'page']
+            keysToDelete.forEach(key => params.delete(key))
             return params
         })
     }
